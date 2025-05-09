@@ -31,7 +31,7 @@ create table article (
                          title varchar(30) not null comment 'Article Title',
                          content varchar(10000) not null comment 'Article Content',
                          cover_img varchar(128) not null comment 'Cover Image',
-                         state varchar(3) default 'Draft' comment 'Article Status: Draft | Published',
+                         state varchar(23) default 'Draft' comment 'Article Status: Draft | Published',
                          category_id int unsigned comment 'Category ID',
                          create_user int unsigned not null comment 'Creator ID',
                          create_time datetime not null comment 'Creation Time',
