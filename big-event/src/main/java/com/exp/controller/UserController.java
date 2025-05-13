@@ -57,4 +57,11 @@ public class UserController {
 
         return Result.success(user);
     }
+
+    @PutMapping("/update")
+    public Result updateUserInfo(@RequestBody User user) {
+        // Assuming you have a method in your service to update user info
+        userService.update(user);
+        return Result.success("User info updated successfully");
+    }
 }

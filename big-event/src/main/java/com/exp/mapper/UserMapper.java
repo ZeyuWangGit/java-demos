@@ -12,4 +12,7 @@ public interface UserMapper {
 
     @Insert("INSERT INTO user (username, password, create_time, update_time) VALUES (#{username}, #{password}, NOW(), NOW())")
     void add(String username, String password);
+
+    @Select("update user set nickname = #{nickname}, email = #{email}, update_time = #{updateTime} where id = #{id}")
+    void update(User user);
 }
