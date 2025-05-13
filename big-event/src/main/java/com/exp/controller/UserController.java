@@ -2,6 +2,8 @@ package com.exp.controller;
 
 import com.exp.context.TokenContext;
 import com.exp.dto.UserRegisterDTO;
+import com.exp.dto.UserUpdateDTO;
+import com.exp.mapper.UserConvert;
 import com.exp.pojo.Result;
 import com.exp.pojo.User;
 import com.exp.service.UserService;
@@ -21,6 +23,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserConvert userConvert;
+
     @PostMapping("/register")
     public Result register(@RequestBody @Valid UserRegisterDTO dto) {
         User user = userService.findByUsername(dto.getUsername());
@@ -33,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result<String> login(@RequestBody @Valid UserRegisterDTO dto) {
+    public Result<Object> login(@RequestBody @Valid UserRegisterDTO dto) {
         User user = userService.findByUsername(dto.getUsername());
         if (user == null) {
             return Result.error("User does not exist");
@@ -59,8 +64,9 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public Result updateUserInfo(@RequestBody User user) {
+    public Result updateUserInfo(@RequestBody UserUpdateDTO userDto) {
         // Assuming you have a method in your service to update user info
+        User user = userConvert.toEntity(userDto);
         userService.update(user);
         return Result.success("User info updated successfully");
     }
