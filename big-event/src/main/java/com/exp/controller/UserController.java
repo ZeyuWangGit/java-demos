@@ -4,6 +4,7 @@ import com.exp.dto.UserRegisterDTO;
 import com.exp.pojo.Result;
 import com.exp.pojo.User;
 import com.exp.service.UserService;
+import com.exp.utils.JwtUtil;
 import com.exp.utils.Md5Util;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -38,7 +42,11 @@ public class UserController {
         } else if (!user.getPassword().equals(Md5Util.getMD5String(dto.getPassword()))) {
             return Result.error("Incorrect password");
         } else {
-            return Result.success("Login successful");
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("username", user.getUsername());
+            claims.put("userId", user.getId());
+            String token = JwtUtil.generateToken(claims);
+            return Result.success(token);
         }
     }
 }
