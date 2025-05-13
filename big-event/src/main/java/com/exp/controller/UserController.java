@@ -11,6 +11,7 @@ import com.exp.utils.JwtUtil;
 import com.exp.utils.Md5Util;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -64,7 +65,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public Result updateUserInfo(@RequestBody UserUpdateDTO userDto) {
+    public Result updateUserInfo(@RequestBody @Validated UserUpdateDTO userDto) {
         // Assuming you have a method in your service to update user info
         User user = userConvert.toEntity(userDto);
         userService.update(user);
