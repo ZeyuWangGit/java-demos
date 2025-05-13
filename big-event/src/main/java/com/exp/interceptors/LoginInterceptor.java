@@ -1,5 +1,6 @@
 package com.exp.interceptors;
 
+import com.exp.context.TokenContext;
 import com.exp.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,11 +17,17 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader("Authorization");
         try {
             Map<String, Object> claims = JwtUtil.parseToken(token);
+            TokenContext.set(claims);
             return true;
         } catch (Exception e) {
             response.setStatus(401);
             response.getWriter().write("Invalid token");
             return false;
         }
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        TokenContext.remove();
     }
 }

@@ -1,5 +1,6 @@
 package com.exp.controller;
 
+import com.exp.context.TokenContext;
 import com.exp.dto.UserRegisterDTO;
 import com.exp.pojo.Result;
 import com.exp.pojo.User;
@@ -8,10 +9,7 @@ import com.exp.utils.JwtUtil;
 import com.exp.utils.Md5Util;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,5 +46,15 @@ public class UserController {
             String token = JwtUtil.generateToken(claims);
             return Result.success(token);
         }
+    }
+
+    @GetMapping("/userInfo")
+    public Result<User> userInfo() {
+        Map<String, Object> claims = TokenContext.get();
+
+        String name = (String) claims.get("username");
+        User user = userService.findByUsername(name);
+
+        return Result.success(user);
     }
 }
