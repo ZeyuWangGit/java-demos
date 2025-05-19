@@ -9,7 +9,7 @@ public class Article {
     private String coverImg;
     private String state;
     private Integer categoryId;
-    private Integer createdUser;
+    private Integer createUser;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
@@ -17,14 +17,14 @@ public class Article {
     }
 
     public Article(Integer id, String title, String content, String coverImg, String state,
-                   Integer categoryId, Integer createdUser, LocalDateTime createTime, LocalDateTime updateTime) {
+                   Integer categoryId, Integer createUser, LocalDateTime createTime, LocalDateTime updateTime) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.coverImg = coverImg;
         this.state = state;
         this.categoryId = categoryId;
-        this.createdUser = createdUser;
+        this.createUser = createUser;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -77,12 +77,12 @@ public class Article {
         this.categoryId = categoryId;
     }
 
-    public Integer getCreatedUser() {
-        return createdUser;
+    public Integer getCreateUser() {
+        return createUser;
     }
 
-    public void setCreatedUser(Integer createdUser) {
-        this.createdUser = createdUser;
+    public void setCreateUser(Integer createUser) {
+        this.createUser = createUser;
     }
 
     public LocalDateTime getCreateTime() {

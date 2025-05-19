@@ -1,9 +1,11 @@
 package com.exp.controller;
 
+import com.exp.dto.ArticleAddDTO;
 import com.exp.pojo.Result;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.exp.service.ArticleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -11,8 +13,12 @@ import java.util.Map;
 @RequestMapping("/article")
 public class ArticleController {
 
-    @GetMapping("/list")
-    public Result<String> list() {
-        return Result.success("Article list");
+    @Autowired
+    private ArticleService articleService;
+
+    @PostMapping
+    public Result add(@RequestBody @Validated ArticleAddDTO articleAddDTO) {
+        articleService.add(articleAddDTO);
+        return Result.success();
     }
 }
