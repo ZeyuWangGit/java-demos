@@ -4,6 +4,7 @@ import com.exp.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper {
@@ -15,4 +16,10 @@ public interface UserMapper {
 
     @Select("update user set nickname = #{nickname}, email = #{email}, update_time = #{updateTime} where id = #{id}")
     void update(User user);
+
+    @Update("UPDATE user SET user_pic = #{avatarUrl}, update_time = NOW() WHERE id = #{id}")
+    void updateAvatar(String avatarUrl, Integer id);
+
+    @Update("UPDATE user SET password = #{newPassword}, update_time = NOW() WHERE id = #{id}")
+    void updatePassword(String newPassword, Integer id);
 }
