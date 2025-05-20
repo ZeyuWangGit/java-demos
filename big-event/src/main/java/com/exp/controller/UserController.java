@@ -13,11 +13,14 @@ import com.exp.utils.Md5Util;
 import jakarta.validation.Valid;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/user")
@@ -28,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserConvert userConvert;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @PostMapping("/register")
     public Result register(@RequestBody @Valid UserRegisterDTO dto) {
@@ -52,6 +58,10 @@ public class UserController {
             claims.put("username", user.getUsername());
             claims.put("userId", user.getId());
             String token = JwtUtil.generateToken(claims);
+
+            ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+            valueOperations.set(token, token, 1, TimeUnit.HOURS);
+
             return Result.success(token);
         }
     }
@@ -81,7 +91,7 @@ public class UserController {
     }
 
     @PatchMapping("/updatePassword")
-    public Result updatePassword(@RequestBody @Validated UpdatePasswordDTO updatePasswordDTO) {
+    public Result updatePassword(@RequestBody @Validated UpdatePasswordDTO updatePasswordDTO, @RequestHeader("Authorization") String token) {
 
         Map<String, Object> claims = TokenContext.get();
         String name = (String) claims.get("username");
@@ -97,6 +107,10 @@ public class UserController {
         } else {
             user.setPassword(Md5Util.getMD5String(updatePasswordDTO.getNewPassword()));
             userService.updatePassword(updatePasswordDTO.getNewPassword());
+
+            ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+            operations.getOperations().delete(token);
+
             return Result.success("Password updated successfully");
         }
     }
